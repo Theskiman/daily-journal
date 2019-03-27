@@ -1,4 +1,4 @@
-
+let apiURL = "http://localhost:8088"
 let displayContainer = document.querySelector("#entryLog")
 
 const journalEntry = {
@@ -9,22 +9,25 @@ const journalEntry = {
 
 }
 
-entries = [{
-    
-    date: "3/27/2019",
-    concepts: "Browsify",
-    statement: "We were introduced to browsify it undermined some of the things we have alreay learned but overall I understood the basics of it.",
-    mood: "Happy"
-}
-]
+const makeJournalEntryComponent = (journalEntries) => {
+    for (i = 0; i < journalEntries.length; i++)
+        journalHTML = `<h1>${journalEntries[i]["concepts"]}</h1>
+        <div>Today, ${journalEntries[i]["date"]}, ${journalEntries[i]["statement"]}</div> 
+        <h3>I feel ${journalEntries[i]["mood"]}</h3>`
 
-const makeJournalEntryComponent = (journalEntries) =>{
-    for(i = 0; i < journalEntries.length; i++)
-    journalHTML = `<div>Today, ${journalEntries[i]["date"]}, we covered the topic ${journalEntries[i]["concepts"]}. ${journalEntries[i]["statement"]} and I feel ${journalEntries[i]["mood"]}`
-    
-        displayContainer.innerHTML += journalHTML
-    
+    displayContainer.innerHTML += journalHTML
+
 }
 
+let getEntries = () => {
+    fetch("http://localhost:8088/entries")
+        .then(entries => entries.json())
+        .then(parsedEntries => {
+            makeJournalEntryComponent(parsedEntries)
+        })
+}
 
-makeJournalEntryComponent(entries)
+
+
+
+getEntries()
